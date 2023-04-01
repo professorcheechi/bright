@@ -46,11 +46,21 @@ while getopts in h flag; do
 done
 
 group_check $@
+t
+redec='^[0-9]+([.][0-9]+)?$'
+maxval=1.00
 
 if [ $# -lt 1 ]; then
+  echo "Input value required."
   usage
-elif [ -n "$(echo "$1" | grep "[[:alpha:]]")" ]; then
+
+elif ! [[ $1 =~ $redec ]]; then
+  echo "Input is not an integer or decimal."
   usage
+elif (( $(echo "$1 >= $maxval" | bc -l) )); then
+  echo "Input value is too great."
+  usage
+
 else 
   mon=$(xrandr | grep " connected" | cut -f1 -d " " | head -1)
   changebright $@
