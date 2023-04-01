@@ -1,0 +1,59 @@
+#!/bin/bash
+
+## functions ##
+
+usage(){
+  printf "\n\n Usage - bright <#> where # is a decimal number from 0 to 1 \
+          \n for multi-display systems, this will set only the main (laptop) screen brightness \
+          \n and depends on you having the built in laptop screen set as the primary \
+          \n\n Set main panel to full brightness: bright 1 \
+          \n Set main panel to  30%% brightness: bright 0.3 \
+
+          \n\n\t\t\t !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! \
+          \n\t\t\t !! Either user must be in group 'video'       !! \
+          \n\t\t\t !! or this script must be run as sudo or root !! \
+          \n\t\t\t !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! \
+          \n\n\n"
+   exit 1
+}
+
+changebright(){
+xrandr --output $mon --brightness $1
+}
+
+group_check(){
+  getent group | grep $(whoami) | grep -q "video" && groupok=1
+  if [ "$groupok" -ne 1 ]; then
+    sudo_check $@ 
+  fi
+}
+
+sudo_check(){
+  if [ "$(id -u)" -ne 0 ]; then
+    usage 
+  #else
+    #sudook=1
+  fi
+}
+
+## main ##
+
+while getopts in h flag; do
+  case $flag in
+    h) usage ;;
+  esac
+  shift 1
+done
+
+group_check $@
+
+if [ $# -lt 1 ]; then
+  usage
+elif [ -n "$(echo "$1" | grep "[[:alpha:]]")" ]; then
+  usage
+else 
+  mon=$(xrandr | grep " connected" | cut -f1 -d " " | head -1)
+  changebright $@
+fi
+
+## end ##
