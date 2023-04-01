@@ -46,7 +46,7 @@ while getopts in h flag; do
 done
 
 group_check $@
-t
+
 redec='^[0-9]+([.][0-9]+)?$'
 maxval=1.00
 
