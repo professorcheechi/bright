@@ -57,6 +57,7 @@ if [ $# -lt 1 ]; then
 elif ! [[ $1 =~ $redec ]]; then
   echo "Input is not an integer or decimal."
   usage
+  
 elif (( $(echo "$1 >= $maxval" | bc -l) )); then
   echo "Input value is too great."
   usage
