@@ -18,7 +18,7 @@ usage(){
 }
 
 changebright(){
-xrandr --output $mon --brightness $1
+  xrandr --output $mon --brightness $1
 }
 
 group_check(){
