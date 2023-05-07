@@ -23,7 +23,7 @@ changebright(){
 
 group_check(){
   getent group | grep $(whoami) | grep -q "video" && groupok=1
-  if [ "$groupok" -ne 1 ]; then
+  if [[ "$groupok" -ne 1 ]]; then
     sudo_check $@ 
   fi
 }
